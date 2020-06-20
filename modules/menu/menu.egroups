@@ -1,0 +1,21 @@
+@group.id Readme
+@group.related Readme.md
+
+@group.id menu/client
+@group.related ./client/*
+@group.related ./client/components/*
+@group.related ./client/routes/*
+@group.title menu/client
+@group.color steelBlue
+
+
+@group.id Apollo
+@group.related PROJECT/server/apollo/schemas/main.graphql
+@group.related PROJECT/server/apollo/server.js
+@group.related PROJECT/server/apollo/module.js
+@group.color #FF0096+10
+
+
+@group.id Apollo Schemas
+@group.related PROJECT/modules/account/apollo/schema/*.graphql
+@group.color #FF0096+10

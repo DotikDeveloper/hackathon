@@ -1,0 +1,29 @@
+type TmpFilesVersions{
+    original:CrateAttachment
+}
+
+type TmpFilesModel{
+    _id:String
+    user_id:String
+    expires:Date
+    versions:TmpFilesVersions
+    url:String
+    fileName:String
+    acl:JSONObject
+}
+
+type TmpFilesList{
+    rows:[TmpFilesModel]
+    total:Int
+}
+
+type TmpFiles{
+    list(pagination:PaginationOptions):TmpFilesList!
+    view(_id:String!):TmpFilesModel
+}
+
+type TmpFilesMutation{
+    create(model:JSONObject,file:Upload):CreateResponse!
+    createMany(files:[Upload]):[TmpFilesModel]!
+    remove(_id:String!):RemoveResponse!
+}

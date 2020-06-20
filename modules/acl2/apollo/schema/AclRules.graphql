@@ -1,0 +1,31 @@
+type AclRulesModel{
+    name:String
+    _id:String
+    roles:[String]
+    resources:[String]
+    actions:[String]
+    mode:String
+    rules:JSONObject
+    conditionExpr:String
+    acl:JSONObject
+    user_id:String
+    user:UsersModel
+}
+
+type AclRulesModelList{
+    rows:[AclRulesModel]
+    total:Int
+}
+
+type AclRules{
+    list(pagination:PaginationOptions):AclRulesModelList!
+    view(_id:String!):AclRulesModel
+    actions(pagination:PaginationOptions resources:[String]):NameLabelList!
+    filters(resources:[String]):[JSONObject]!
+}
+
+type AclRulesMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

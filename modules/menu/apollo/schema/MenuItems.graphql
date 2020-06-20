@@ -1,0 +1,33 @@
+type MenuItemsModel{
+	_id:String!
+	menu_id: String
+	user_id: String
+	top: Int
+	left: Int
+	index: String
+	block_id: String
+	label: String
+	data : JSONObject
+	connections:[JSONObject]
+	menu:MenusModel
+	user:UsersModel
+	menuBlock:MenuBlocksModel
+	acl:JSONObject
+}
+
+type MenuItemsModelList{
+    rows:[MenuItemsModel]
+    total:Int
+}
+
+type MenuItems{
+    validate(model:JSONObject):ValidationResponse
+    view(_id:String!):MenuItemsModel
+    list(pagination:PaginationOptions):MenuItemsModelList!    
+}
+
+type MenuItemsMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

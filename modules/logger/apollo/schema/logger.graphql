@@ -1,0 +1,3 @@
+# import * from "LoggerTags.graphql"
+# import * from "LoggerLogs.graphql"
+# import * from "LoggerGlobalLogs.graphql"

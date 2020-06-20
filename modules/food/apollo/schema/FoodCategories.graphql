@@ -1,0 +1,24 @@
+type FoodCategoriesModel{
+    _id:String!
+    name: String
+    icon: String
+    yaMarketCategories:[YaMarketCategoriesModel]
+    index:Int
+}
+
+type FoodCategoriesModelList{
+    rows:[FoodCategoriesModel]
+    total:Int
+}
+
+type FoodCategories{
+    validate(model:JSONObject):ValidationResponse
+    view(_id:String!):FoodCategoriesModel
+    list(pagination:PaginationOptions):FoodCategoriesModelList!    
+}
+
+type FoodCategoriesMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

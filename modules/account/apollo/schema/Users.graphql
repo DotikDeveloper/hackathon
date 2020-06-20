@@ -1,0 +1,40 @@
+type UsersModel{
+    _id:String!
+    login:String
+    role:AclRole
+    roleName:String
+    name:String
+    avatar:String
+    email:String
+    passport:JSONObject
+    currentUser:UsersModel
+    server_id:String
+    timezone:String
+    node_id:String
+    node:NodesModel
+    server:ServersModel
+    data:JSONObject
+    acl:JSONObject
+}
+
+type UsersList{
+    rows:[UsersModel]
+    total:Int
+}
+
+type Users{
+    validate(model:JSONObject):ValidationResponse
+    list(pagination:PaginationOptions):UsersList!
+    view(_id:String!):UsersModel
+    me:UsersModel
+    timezones:[String]
+}
+
+type UsersMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+    exit:Boolean!
+    loginAs(_id:String!):Boolean!
+    logoutFrom(_id:String!):Boolean!
+}

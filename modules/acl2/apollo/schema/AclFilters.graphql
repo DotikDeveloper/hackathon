@@ -1,0 +1,27 @@
+type AclFiltersModel{
+    _id:String
+    name:String
+    fieldType:String
+    labelExpression:String
+    modelNames:[String]
+    mongoPathExpression:String
+    mongoValueExpression:String
+    acl:JSONObject
+}
+
+type AclFiltersModelList{
+    rows:[AclFiltersModel]
+    total:Int
+}
+
+type AclFilters{
+    list(pagination:PaginationOptions):AclFiltersModelList!
+    view(_id:String!):AclFiltersModel
+    resourceNames(pagination:PaginationOptions):NameLabelList
+}
+
+type AclFiltersMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

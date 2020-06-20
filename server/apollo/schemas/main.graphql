@@ -1,0 +1,203 @@
+scalar Long
+scalar Date
+scalar JSON
+scalar JSONObject
+scalar Upload
+
+# import * from 'File.graphql'
+# import * from "./../../../modules/account/apollo/schema/account.graphql"
+# import * from "./../../../modules/cluster/apollo/schema/cluster.graphql"
+# import * from "./../../../modules/tmpfiles/apollo/schema/tmpfiles.graphql"
+# import * from "./../../../modules/acl2/apollo/schema/acl.graphql"
+# import * from "./../../../modules/generator/apollo/schema/generator.graphql"
+# import * from "./../../../modules/vmrunner/apollo/schema/vmrunner.graphql"
+# import * from "./../../../modules/logger/apollo/schema/logger.graphql"
+# import * from "./../../../modules/menu/apollo/schema/menu.graphql"
+# import * from "./../../../modules/files/apollo/schema/files.graphql"
+# import * from "./../../../modules/services/apollo/schema/services.graphql"
+# import * from "./../../../modules/settings/apollo/schema/settings.graphql"
+# import * from "./../../../modules/custom/apollo/schema/custom.graphql"
+# import * from "./../../../modules/geo/apollo/schema/geo.graphql"
+# import * from "./../../../modules/food/apollo/schema/food.graphql"
+
+type EditResponse{
+    success:Boolean!
+    message:String
+    errors:[String]
+    _id:String
+}
+type CreateResponse{
+    success:Boolean!
+    message:String
+    errors:[String]
+    _id:String
+    model:JSONObject
+}
+
+type RemoveResponse{
+    success:Boolean!
+    message:String
+    errors:[String]
+}
+
+input PaginationOptions {
+    filters:JSONObject
+    sort:JSONObject
+    page:Int
+    perPage:Int
+}
+
+type CrateAttachment{
+    name:String
+    path:String
+    size:Int
+    type:String
+    date:Date
+}
+
+type AsteriskVersions{
+    original:CrateAttachment
+    asterisk:CrateAttachment
+}
+
+type NameLabelItem{
+    name:String!
+    label:String!
+}
+type NameLabelList{
+    rows:[NameLabelItem]
+    total:Int
+}
+
+type ValidationError{
+    message:String
+    type:String
+    path:String
+    value:String
+    field:String
+}
+
+type ValidationResponse{
+    errors:[ValidationError]
+}
+
+type Query{
+    files:Files
+    users:Users
+
+    #food module
+    yaMarketCategories:YaMarketCategories
+    foodSourceTypes:FoodSourceTypes
+    foodSources:FoodSources
+    foodCategories:FoodCategories
+    foodOffers:FoodOffers
+
+    #cluster
+    servers:Servers
+    nodes:Nodes
+    nodeInstances:NodeInstances
+    tmpFiles:TmpFiles,
+
+    aclRoles:AclRoles
+    aclFilters:AclFilters
+    aclRules:AclRules
+
+    generatorTemplates:GeneratorTemplates
+    generatorItems:GeneratorItems
+    vmTemplates:VMTemplates
+    vmCodes:VmCodes
+    loggerTags:LoggerTags
+    loggerLogs:LoggerLogs
+    loggerGlobalLogs:LoggerGlobalLogs
+    kladrStreets:KladrStreets
+
+    menuTypes:MenuTypes
+    menuBlocks:MenuBlocks
+    menus:Menus
+    menuItems:MenuItems
+    menuSessions:MenuSessions
+
+    imageFiles:ImageFiles
+
+    customServices:CustomServices
+    customServiceInstances:CustomServiceInstances
+
+    settings:Settings
+
+    customRoutes:CustomRoutes
+    navItems:NavItems
+}
+
+type Mutation {
+    kladrStreets:KladrStreetsMutation
+    files:FilesMutation
+    users:UsersMutation
+    #food module
+    yaMarketCategories:YaMarketCategoriesMutation
+    foodSourceTypes:FoodSourceTypesMutation
+    foodSources:FoodSourcesMutation
+    foodCategories:FoodCategoriesMutation
+    foodOffers:FoodOffersMutation
+
+    #cluster
+    servers:ServersMutation
+    nodes:NodesMutation
+    nodeInstances:NodeInstancesMutation
+
+    tmpFiles:TmpFilesMutation
+
+    aclRoles:AclRolesMutation
+    aclFilters:AclFiltersMutation
+    aclRules:AclRulesMutation
+
+    generatorTemplates:GeneratorTemplatesMutation
+    generatorItems:GeneratorItemsMutation
+    vmTemplates:VMTemplatesMutation
+    vmCodes:VmCodesMutation
+    loggerTags:LoggerTagsMutation
+    loggerLogs:LoggerLogsMutation
+    loggerGlobalLogs:LoggerGlobalLogsMutation
+
+    #menu
+    menuTypes:MenuTypesMutation
+    menuBlocks:MenuBlocksMutation
+    menus:MenusMutation
+    menuItems:MenuItemsMutation
+    menuSessions:MenuSessionsMutation
+
+    #files
+    imageFiles:ImageFilesMutation
+
+    #services
+    customServices:CustomServicesMutation
+    customServiceInstances:CustomServiceInstancesMutation
+
+    settings:SettingsMutation
+
+    customRoutes:CustomRoutesMutation
+    navItems:NavItemsMutation
+}
+
+type ObserveChangesPayload{
+    _id:String!
+    model:JSONObject
+    changedFields:[String]
+    newModel:JSONObject
+    oldModel:JSONObject
+}
+type ObserveChanges{
+    event:String!
+    payload:ObserveChangesPayload
+}
+
+type Subscription {
+    users:ObserveChanges
+    observeMe:ObserveChanges
+    callImports(pagination:PaginationOptions):ObserveChanges
+}
+
+schema {
+    query: Query
+    mutation: Mutation
+    subscription: Subscription
+}

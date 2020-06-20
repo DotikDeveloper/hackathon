@@ -1,0 +1,29 @@
+type CustomServiceInstancesModel{
+	_id:String!
+	custom_service_id: String
+	server_id: String
+	node_id: String
+	meta : JSONObject
+	state: String
+	server:ServersModel
+	node:NodesModel
+	customService:CustomServicesModel
+	acl:JSONObject
+}
+
+type CustomServiceInstancesModelList{
+    rows:[CustomServiceInstancesModel]
+    total:Int
+}
+
+type CustomServiceInstances{
+    validate(model:JSONObject):ValidationResponse
+    view(_id:String!):CustomServiceInstancesModel
+    list(pagination:PaginationOptions):CustomServiceInstancesModelList!    
+}
+
+type CustomServiceInstancesMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

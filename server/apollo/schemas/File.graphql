@@ -1,0 +1,19 @@
+type File {
+    name: String!
+    type: String!
+}
+type Files {
+    uploads: [File]
+}
+
+type FilesMutation {
+    upload(file: Upload!): File!
+}
+
+mutation UploadFile ($file: Upload!) {
+    files{
+        upload(file: $file) {
+            name,type
+        }
+    }
+}

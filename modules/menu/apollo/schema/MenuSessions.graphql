@@ -1,0 +1,28 @@
+type MenuSessionsModel{
+	_id:String!
+	meta : JSONObject
+	menu_id: String
+	created: Date
+	user_id: String
+	serialized: String
+	user:UsersModel
+	menu:MenusModel
+    acl:JSONObject
+}
+
+type MenuSessionsModelList{
+    rows:[MenuSessionsModel]
+    total:Int
+}
+
+type MenuSessions{
+    validate(model:JSONObject):ValidationResponse
+    view(_id:String!):MenuSessionsModel
+    list(pagination:PaginationOptions):MenuSessionsModelList!    
+}
+
+type MenuSessionsMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

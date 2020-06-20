@@ -1,0 +1,29 @@
+<template>
+    <textarea
+            v-model="value"
+            :id="getFieldID(schema)"
+            :class="getFieldClasses()"
+            :disabled="disabled"
+            :maxlength="schema.max"
+            :minlength="schema.min"
+            :placeholder="schema.placeholder"
+            :readonly="schema.readonly"
+            :required="schema.required"
+            :rows="schema.rows || 2"
+            :name="schema.inputName"
+            v-attributes="'input'"
+        />
+</template>
+
+<script>
+import abstractField from "../../../fields/abstractField";
+
+export default {
+	mixins: [abstractField]
+};
+</script>
+
+
+<style lang="scss">
+
+</style>

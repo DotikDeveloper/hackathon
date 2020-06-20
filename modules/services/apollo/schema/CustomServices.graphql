@@ -1,0 +1,31 @@
+type CustomServicesModel{
+	_id:String!
+	name: String
+	classExpr: String
+	user_id: String
+	viewComponent: String
+	paginationComponent: String
+	rules : JSONObject
+	image_file_id: String
+	user:UsersModel
+	imageFile:ImageFilesModel
+	autostart:Boolean
+	acl:JSONObject
+}
+
+type CustomServicesModelList{
+    rows:[CustomServicesModel]
+    total:Int
+}
+
+type CustomServices{
+    validate(model:JSONObject):ValidationResponse
+    view(_id:String!):CustomServicesModel
+    list(pagination:PaginationOptions):CustomServicesModelList!    
+}
+
+type CustomServicesMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

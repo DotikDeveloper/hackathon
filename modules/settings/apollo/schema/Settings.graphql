@@ -1,0 +1,25 @@
+type SettingsModel{
+	_id:String!
+	system_name: String
+	label: String
+	data : JSONObject
+	vfgSchema: String
+    acl:JSONObject
+}
+
+type SettingsModelList{
+    rows:[SettingsModel]
+    total:Int
+}
+
+type Settings{
+    validate(model:JSONObject):ValidationResponse
+    view(_id:String!):SettingsModel
+    list(pagination:PaginationOptions):SettingsModelList!    
+}
+
+type SettingsMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

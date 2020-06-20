@@ -1,0 +1,27 @@
+type FoodSourceTypesModel{
+	_id:String!
+	name: String
+	image_id: String
+	user_id: String
+	sysName: String
+	user:UsersModel
+	image:ImageFilesModel
+    vfgSchema:String
+}
+
+type FoodSourceTypesModelList{
+    rows:[FoodSourceTypesModel]
+    total:Int
+}
+
+type FoodSourceTypes{
+    validate(model:JSONObject):ValidationResponse
+    view(_id:String!):FoodSourceTypesModel
+    list(pagination:PaginationOptions):FoodSourceTypesModelList!    
+}
+
+type FoodSourceTypesMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

@@ -1,0 +1,30 @@
+type ServersModel{
+    _id:String!
+    name:String!
+    isMaster:Boolean
+    isDefault:Boolean
+    available:Int
+    free:Int
+    total:Int
+    nodes:[NodesModel]
+    defaultNode:NodesModel
+    defaultNodeId:String
+    node_ids:[String]
+    acl:JSONObject
+}
+
+type ServersList{
+    rows:[ServersModel]
+    total:Int
+}
+
+type Servers{
+    list(pagination:PaginationOptions):ServersList!
+    view(_id:String!):ServersModel
+    nodeNames:[String]
+}
+
+type ServersMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+}

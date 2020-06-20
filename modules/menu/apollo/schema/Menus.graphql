@@ -1,0 +1,32 @@
+type MenusModel{
+	_id:String!
+	name: String
+	user_id: String
+	ctxClassExpr: String
+    menu_type_id:String
+    data:JSONObject
+    user:UsersModel
+    menuType:MenuTypesModel
+    menuItems:[MenuItemsModel]
+    acl:JSONObject
+}
+
+type MenusModelList{
+    rows:[MenusModel]
+    total:Int
+}
+
+type Menus{
+    validate(model:JSONObject):ValidationResponse
+    editorValidate(model:JSONObject):ValidationResponse
+    view(_id:String!):MenusModel
+    list(pagination:PaginationOptions):MenusModelList!
+    variables(_id:String! model:JSONObject!):JSONObject
+}
+
+type MenusMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    editorEdit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

@@ -1,0 +1,25 @@
+type GeneratorItemsModel{
+    _id:String
+    name:String
+    template_id:String
+    templateData:JSONObject
+	template:GeneratorTemplatesModel
+    acl:JSONObject
+}
+
+type GeneratorItemsModelList{
+    rows:[GeneratorItemsModel]
+    total:Int
+}
+
+type GeneratorItems{
+    validate(model:JSONObject):ValidationResponse
+    view(_id:String!):GeneratorItemsModel
+    list(pagination:PaginationOptions):GeneratorItemsModelList!    
+}
+
+type GeneratorItemsMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

@@ -1,0 +1,32 @@
+type FoodOffersModel{
+	_id:String!
+	text: String
+	images: [String]
+	data : JSONObject
+	food_source_id: String
+	created: Date
+	expiries: Date
+	link: String
+	active: Boolean
+	foodSource:FoodSourcesModel
+	point:JSONObject
+	region:JSONObject
+	address:String
+}
+
+type FoodOffersModelList{
+    rows:[FoodOffersModel]
+    total:Int
+}
+
+type FoodOffers{
+    validate(model:JSONObject):ValidationResponse
+    view(_id:String!):FoodOffersModel
+    list(pagination:PaginationOptions):FoodOffersModelList!    
+}
+
+type FoodOffersMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

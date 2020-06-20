@@ -1,0 +1,39 @@
+type VMTemplatesServerOptions{
+	useCustom: Boolean
+	server_id: String
+	node_name: String
+}
+
+type VMTemplatesModel{
+	_id:String!
+	name: String
+	user_id: String
+	expression: String
+	useCustomScope: Boolean
+	scopeExpression: String
+	created: Date
+	useCustomCtx: Boolean
+	ctxExpression: String
+	serverOptions : VMTemplatesServerOptions
+	user:UsersModel
+	server:ServersModel
+	acl:JSONObject
+}
+
+type VMTemplatesModelList{
+    rows:[VMTemplatesModel]
+    total:Int
+}
+
+type VMTemplates{
+    validate(model:JSONObject):ValidationResponse
+    view(_id:String!):VMTemplatesModel
+    list(pagination:PaginationOptions):VMTemplatesModelList!
+	run(model:JSONObject):VMRunResult
+}
+
+type VMTemplatesMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

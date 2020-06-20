@@ -1,0 +1,30 @@
+type MenuTypesModel{
+	_id:String!
+	name: String
+	image_file_id: String
+	user_id: String
+	ctxClassExpr: String
+	supertype: String
+	menuVfgSchema:String
+	user:UsersModel
+	imageFile:ImageFilesModel
+	menuBlocks:[MenuBlocksModel]
+	acl:JSONObject
+}
+
+type MenuTypesModelList{
+    rows:[MenuTypesModel]
+    total:Int
+}
+
+type MenuTypes{
+    validate(model:JSONObject):ValidationResponse
+    view(_id:String!):MenuTypesModel
+    list(pagination:PaginationOptions):MenuTypesModelList!    
+}
+
+type MenuTypesMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

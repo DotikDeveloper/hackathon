@@ -1,0 +1,31 @@
+type LoggerTagsLevels{
+	console: String
+	mongo: String
+	mongoGlobal: String
+}
+
+
+type LoggerTagsModel{
+	_id:String!
+	name: String
+	label: String
+	levels : LoggerTagsLevels
+    acl:JSONObject
+}
+
+type LoggerTagsModelList{
+    rows:[LoggerTagsModel]
+    total:Int
+}
+
+type LoggerTags{
+    validate(model:JSONObject):ValidationResponse
+    view(_id:String!):LoggerTagsModel
+    list(pagination:PaginationOptions):LoggerTagsModelList!    
+}
+
+type LoggerTagsMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

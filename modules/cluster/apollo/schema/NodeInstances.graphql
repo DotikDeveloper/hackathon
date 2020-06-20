@@ -1,0 +1,29 @@
+type NodeInstancesModel{
+	_id:String!
+	server_id: String
+	node_id: String
+	meta : JSONObject
+	base_url: String
+	state: String
+	stateChanged: Date
+	server:ServersModel
+	node:NodesModel
+	acl:JSONObject
+}
+
+type NodeInstancesModelList{
+    rows:[NodeInstancesModel]
+    total:Int
+}
+
+type NodeInstances{
+    validate(model:JSONObject):ValidationResponse
+    view(_id:String!):NodeInstancesModel
+    list(pagination:PaginationOptions):NodeInstancesModelList!    
+}
+
+type NodeInstancesMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

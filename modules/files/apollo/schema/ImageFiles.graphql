@@ -1,0 +1,32 @@
+type ImageFilesVersions{
+    original:CrateAttachment
+    small:CrateAttachment
+    medium:CrateAttachment
+}
+
+type ImageFilesModel{
+    _id:String
+    user_id:String
+    expires:Date
+    versions:ImageFilesVersions
+    url:String
+    fileName:String
+    urls:JSONObject
+    acl:JSONObject
+}
+
+type ImageFilesList{
+    rows:[ImageFilesModel]
+    total:Int
+}
+
+type ImageFiles{
+    list(pagination:PaginationOptions):ImageFilesList!
+    view(_id:String!):ImageFilesModel
+}
+
+type ImageFilesMutation{
+    create(model:JSONObject,file:Upload):CreateResponse!
+    createMany(files:[Upload]):[ImageFilesModel]!
+    remove(_id:String!):RemoveResponse!
+}

@@ -1,0 +1,34 @@
+type LoggerGlobalLogsMeta{
+	user_id: String
+	server_id: String
+	node: String
+}
+
+
+type LoggerGlobalLogsModel{
+	_id:String!
+	message: String
+	tag: String
+	level: String
+	dataString: String
+	created: Date
+	meta : LoggerGlobalLogsMeta
+	acl:JSONObject
+}
+
+type LoggerGlobalLogsModelList{
+    rows:[LoggerGlobalLogsModel]
+    total:Int
+}
+
+type LoggerGlobalLogs{
+    validate(model:JSONObject):ValidationResponse
+    view(_id:String!):LoggerGlobalLogsModel
+    list(pagination:PaginationOptions):LoggerGlobalLogsModelList!    
+}
+
+type LoggerGlobalLogsMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

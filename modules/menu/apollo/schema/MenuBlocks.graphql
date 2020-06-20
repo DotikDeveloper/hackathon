@@ -1,0 +1,34 @@
+type MenuBlocksModel{
+	_id:String!
+	name: String
+	menu_type_ids: [String]
+	user_id: String
+	image_file_id: String
+	vfgSchema: String
+	serverClass: String
+	isSource: Boolean
+	isTarget: Boolean
+	isRoot: Boolean
+	addSystemButtons:Boolean
+	user:UsersModel
+	imageFile:ImageFilesModel
+	menuTypes:[MenuTypesModel]
+	acl:JSONObject
+}
+
+type MenuBlocksModelList{
+    rows:[MenuBlocksModel]
+    total:Int
+}
+
+type MenuBlocks{
+    validate(model:JSONObject):ValidationResponse
+    view(_id:String!):MenuBlocksModel
+    list(pagination:PaginationOptions):MenuBlocksModelList!    
+}
+
+type MenuBlocksMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

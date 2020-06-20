@@ -1,0 +1,43 @@
+type VmCodesMeta{
+	user_id: String
+	project_id: String
+	menu_id: String
+	tag: String
+}
+type VmCodesCheck{
+	result: String
+	date: Date
+}
+
+
+type VmCodesModel{
+	_id:String!
+	expression: String
+	transpiledExpression: String
+	useCustomScope: Boolean
+	scopeExpression: String
+	useCustomCtx: Boolean
+	ctxExpression: String
+	created: Date
+	meta : VmCodesMeta
+	check : VmCodesCheck
+	acl:JSONObject
+}
+
+type VmCodesModelList{
+    rows:[VmCodesModel]
+    total:Int
+}
+
+type VmCodes{
+    validate(model:JSONObject):ValidationResponse
+    view(_id:String!):VmCodesModel
+    list(pagination:PaginationOptions):VmCodesModelList!
+	run(model:JSONObject):VMRunResult
+}
+
+type VmCodesMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

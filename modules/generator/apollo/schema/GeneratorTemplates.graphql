@@ -1,0 +1,45 @@
+type GeneratorTemplatesItem{
+    path:String!
+    template:String!
+}
+
+type GeneratorTemplatesChild{
+    _id:String!
+    multiple:Boolean
+}
+
+type GeneratorTemplatesModel{
+    _id:String
+    name:String
+    description:String
+    isRoot:Boolean
+    schemaExpression:String
+    helpersExpression:String
+    children:[GeneratorTemplatesChild]
+    childrenTemplates:[GeneratorTemplatesModel],
+    templateItems:[GeneratorTemplatesItem]
+    acl:JSONObject
+}
+
+type GeneratorTemplatesModelList{
+    rows:[GeneratorTemplatesModel]
+    total:Int
+}
+
+type GeneratorTemplates{
+    list(pagination:PaginationOptions):GeneratorTemplatesModelList!
+    view(_id:String!):GeneratorTemplatesModel
+    autocomplete(pagination:PaginationOptions):NameLabelList
+    validate(model:JSONObject):ValidationResponse
+}
+
+
+type GeneratorTemplatesGenerateResponse{
+    output:String!
+}
+type GeneratorTemplatesMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+    generate(model:JSONObject):TmpFilesModel!
+}

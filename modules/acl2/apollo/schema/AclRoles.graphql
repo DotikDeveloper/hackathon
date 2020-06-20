@@ -1,0 +1,35 @@
+type AclRole{
+    _id:String
+    name:String
+    label:String
+    resources:JSONObject
+    acl:JSONObject
+}
+type AclRolesList{
+    rows:[AclRole]
+    total:Int
+}
+
+type AclRolesResourceFieldsItem{
+    name:String!
+    label:String!
+    resource:String!
+}
+type AclRolesResourceFieldsList{
+    rows:[AclRolesResourceFieldsItem]
+    total:Int
+}
+
+type AclRoles{
+    list(pagination:PaginationOptions):AclRolesList!
+    view(_id:String):AclRole
+    validate(model:JSONObject):ValidationResponse
+    resources:[NameLabelItem]
+    resourceFields(pagination:PaginationOptions):AclRolesResourceFieldsList
+}
+
+type AclRolesMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

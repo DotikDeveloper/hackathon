@@ -1,0 +1,30 @@
+type NavItemsModel{
+	_id:String!
+	name: String
+	dataExpression: String
+	parent_item_id: String
+	user_id: String
+    index:Int
+    rules:JSONObject
+	parentItem:NavItemsModel
+	user:UsersModel
+    acl:JSONObject
+}
+
+type NavItemsModelList{
+    rows:[NavItemsModel]
+    total:Int
+}
+
+type NavItems{
+    validate(model:JSONObject):ValidationResponse
+    view(_id:String!):NavItemsModel
+    list(pagination:PaginationOptions):NavItemsModelList!
+    treeData:[JSONObject]
+}
+
+type NavItemsMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

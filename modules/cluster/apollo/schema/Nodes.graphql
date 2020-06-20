@@ -1,0 +1,27 @@
+type NodesModel{
+	_id:String!
+	name: String
+    baseUrlExpr: String
+	port: Int
+	viewComponent: String
+	paginationComponent: String
+	servers:[ServersModel]
+    acl:JSONObject
+}
+
+type NodesModelList{
+    rows:[NodesModel]
+    total:Int
+}
+
+type Nodes{
+    validate(model:JSONObject):ValidationResponse
+    view(_id:String!):NodesModel
+    list(pagination:PaginationOptions):NodesModelList!    
+}
+
+type NodesMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

@@ -1,0 +1,23 @@
+type KladrStreetsModel{
+	_id:String!
+	name: String
+	lemmas: [String]
+    tokens:[String]
+}
+
+type KladrStreetsModelList{
+    rows:[KladrStreetsModel]
+    total:Int
+}
+
+type KladrStreets{
+    validate(model:JSONObject):ValidationResponse
+    view(_id:String!):KladrStreetsModel
+    list(pagination:PaginationOptions):KladrStreetsModelList!    
+}
+
+type KladrStreetsMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

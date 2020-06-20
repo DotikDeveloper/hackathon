@@ -1,0 +1,9 @@
+# import * from "VMTemplates.graphql"
+# import * from "VmCodes.graphql"
+
+type VMRunResult{
+    result:JSONObject,
+    error:String
+    stack:String
+    delay:Int
+}

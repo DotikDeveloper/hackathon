@@ -1,0 +1,27 @@
+type CustomRoutesModel{
+	_id:String!
+	name: String
+	rules : JSONObject
+	route: String
+	vueTemplate: String
+	user_id: String
+	user:UsersModel
+    acl:JSONObject
+}
+
+type CustomRoutesModelList{
+    rows:[CustomRoutesModel]
+    total:Int
+}
+
+type CustomRoutes{
+    validate(model:JSONObject):ValidationResponse
+    view(_id:String!):CustomRoutesModel
+    list(pagination:PaginationOptions):CustomRoutesModelList!    
+}
+
+type CustomRoutesMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

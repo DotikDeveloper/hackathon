@@ -1,0 +1,34 @@
+type LoggerLogsMeta{
+	user_id: String
+	server_id: String
+	node: String
+}
+
+
+type LoggerLogsModel{
+	_id:String!
+	message: String
+	tag: String
+	level: String
+	dataString: String
+	created: Date
+	meta : LoggerLogsMeta
+	acl:JSONObject
+}
+
+type LoggerLogsModelList{
+    rows:[LoggerLogsModel]
+    total:Int
+}
+
+type LoggerLogs{
+    validate(model:JSONObject):ValidationResponse
+    view(_id:String!):LoggerLogsModel
+    list(pagination:PaginationOptions):LoggerLogsModelList!    
+}
+
+type LoggerLogsMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

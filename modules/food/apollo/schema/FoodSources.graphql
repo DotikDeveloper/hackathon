@@ -1,0 +1,28 @@
+type FoodSourcesModel{
+	_id:String!
+	name: String
+	type_id: String
+	data : JSONObject
+	created: Date
+	parsed: Date
+	geoNames: [String]
+	active: Boolean
+	foodSourceType:FoodSourceTypesModel
+}
+
+type FoodSourcesModelList{
+    rows:[FoodSourcesModel]
+    total:Int
+}
+
+type FoodSources{
+    validate(model:JSONObject):ValidationResponse
+    view(_id:String!):FoodSourcesModel
+    list(pagination:PaginationOptions):FoodSourcesModelList!    
+}
+
+type FoodSourcesMutation{
+    edit(_id:String!,model:JSONObject!): EditResponse!
+    create(model:JSONObject):CreateResponse!
+    remove(_id:String!):RemoveResponse!
+}

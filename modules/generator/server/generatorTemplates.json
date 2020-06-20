@@ -1,0 +1,148 @@
+[
+  {
+    "_id" : ObjectId("5e556fa3a4c5c9101b6425c6"),
+    "description" : null,
+    "isRoot" : false,
+    "children" : [
+      {
+        "multiple" : false,
+        "_id" : "5e5818146649bd356c7034de"
+      },
+      {
+        "multiple" : false,
+        "_id" : "5e581e206649bd356c703942"
+      },
+      {
+        "multiple" : false,
+        "_id" : "5e592bc416b50928ce49aebe"
+      }
+    ],
+    "name" : "Mongoose.Model",
+    "schemaExpression" : "new Object({\n    fields:[\n        {\n            model:'modelName',\n            type:'input',\n            inputType:'text',\n            label:'Название модели',\n            required:true,\n            validator:'required'\n        },{\n            model:'modelLabel',\n            type:'input',\n            inputType:'text',\n            label:'Label модели',\n          \tdefault:''\n        },{\n            model:'schemaFields',\n            type:'array',\n            label:'Поля схемы',\n            default:function(){return [];},\n            items:{\n                type: 'object',\n                schema:{\n                    theme:'bootstrap',\n                    template:`<div class=\"container\">\n\t<div class=\"row\">\n\t\t<div class=\"col\">\n\t\t\t<vfg-field for=\"name\"/>\n\t\t</div>\n\t\t<div class=\"col\">\n\t\t\t<vfg-field for=\"label\"/>\n\t\t</div>\n\t\t<div class=\"col\">\n\t\t\t<vfg-field for=\"type\"/>\n\t\t</div>\n\t</div>\n\t<div class=\"row\">\n\t\t<div class=\"col\">\n\t\t\t<vfg-field for=\"unique\"/>\n\t\t</div>\n\t\t<div class=\"col\">\n\t\t\t<vfg-field for=\"default\"/>\n\t\t</div>\n\t\t<div class=\"col\">\n\t\t\t<vfg-field for=\"required\"/>\n\t\t\t<vfg-field for=\"requiredMessage\"/>\n\t\t</div>\n\t</div>\n</div>`,\n                    fields:[\n                        {\n                            model:'name',\n                            type:'input',\n                            requried:true,\n                            validator:'required',\n                            inputType:'text',\n                            label:'Имя поля'\n                        },\n                      \t{\n                            model:'label',\n                            type:'input',\n                            inputType:'text',\n                            label:'Label поля',\n                          default:''\n                        },\n                        {\n                            model:'type',\n                            type:'select',\n                            values:[{id:'String',name:'String'},{id:'Boolean',name:'Boolean'},{id:'Number',name:'Number'}],\n                            default:'String',\n                            label:'Тип поля'\n                        },{\n                            model:'required',\n                            type:'switch',\n                            default:false,\n                            label:'required'\n                        },{\n                            model:'requiredMessage',\n                            type:'input',\n                            inputType:'text',\n                            label:'Сообщение при ошибке валидации required',\n                            visible:function(model){\n                                return model.required;\n                            },\n                          default:''\n                        },{\n                            model:'unique',\n                            label:'unique',\n                            type:'switch',\n                            default:false\n                        },{\n                            model:'default',\n                            label:'default (js-код)',\n                            type:'input',inputType:'text',\n                            default:null\n                        }\n                    ]\n                }\n            }\n        },{\n            model:'relations',\n            type:'array',\n            label:'Связи',\n            default:[],\n            items:{\n                type:'object',\n                schema:{\n                    fields:[\n                        {\n                            model:'relationName',\n                            label:'Имя cвязи',\n                            type:'input',inputType:'text',\n                            required:'true',validator:'required'\n                        },{\n                            model:'collection',\n                            label:'Имя коллекции',\n                            type:'input',inputType:'text',\n                            required:'true',validator:'required'\n                        },{\n                            model:'localField',\n                            label:'localField',\n                            type:'input',inputType:'text',\n                            required:'true',validator:'required'\n                        },{\n                            model:'foreignField',\n                            label:'foreignField',\n                            type:'input',inputType:'text',\n                            required:'true',validator:'required'\n                        },{\n                            model:'justOne',\n                            label:'justOne',\n                            type:'switch',\n                            default:false\n                        }\n                    ]\n                }\n            }\n        }\n    ]\n});",
+    "__v" : 36,
+    "templateItems" : [
+      {
+        "template" : "import {Schema} from 'mongoose';\nimport mongoose from 'mongoose';\nimport {validate as codeValidate} from \"/modules/vmrunner\";\n{{ var lModelName = _.lowerFirst(it.modelName); }}\n{{ var uModelName = _.upperFirst(it.modelName); }}\n/**\n * @constructor {{=uModelName}}\n **/\nconst {{=uModelName}}Schema = new Schema({\n{{?schemaFields.length}}\n{{~schemaFields :schemaField:schemaFieldIndex}}\n    {{=schemaField.name}}:{\n        type:{{=schemaField.type}},\n        {{?schemaField.required}}required:true,{{?}}\n        {{?schemaField.unique}}unique:true,{{?}}\n        {{?schemaField.default}}default(){ return {{=schemaField.default}} },{{?}}\n    }{{?schemaFieldIndex<schemaFields.length-1}},{{?}}\n{{~}}\n{{?}}\n    name:{\n        type:String,\n        required:true,\n        unique:true,\n    },\n    description:{\n        type:String,default:null\n    },\n    path:{\n        type:String,\n        required:[true,'Путь обязателен для заполнения']\n    },\n    isRoot:{\n        type:Boolean,default:false\n    },\n    schemaExpression:{\n        type:String,\n        required: [true, 'Код обязателен'],\n        validate:codeValidate\n    },\n    children:[{ type: Schema.Types.ObjectId, ref: 'generatorTemplates' }],\n    template:{\n        type:String,default:''\n    }\n});\n{{?relations.length}}\n{{~relations :relation:relationIndex}}\n{{=uModelName}}Schema.virtual('{{=relation.relationName}}', {\n    ref:'{{=relation.collection}}',\n    localField: '{{=relation.localField}}',\n    foreignField: '{{=relation.foreignField}}',\n    justOne: {{=String(relation.justOne)}},\n    options: {\n\t\t\n    }\n});\n{{~}}\n{{?}}\nconst {{=uModelName}} = new mongoose.model('{{=lModelName}}',{{=uModelName}}Schema,'{{=lModelName}}');\n{{=uModelName}}={{=modelLabel}};\nexport default {{=uModelName}};",
+        "_id" : ObjectId("5e598f26ab135b1f2773f10d"),
+        "path" : "{{=$parent.moduleName}}/models/{{=_.upperFirst(modelName)}}.js"
+      },
+      {
+        "template" : "{{var modelsData = $parent.children[$template.id];}}\n{{?modelsData.length}}\n\t{{~modelsData :modelData:modelIndex}}\n    \t{{var modelName = _.lowerFirst(modelData.modelName);}}\n    \timport {{=modelName}}Routes from './routes/{{=modelName}}.routes';\n    {{~}}\n{{?}}\nlet routes = [\n{{?modelsData.length}}\n\t{{~modelsData :modelData:modelIndex}}\n    \t{{var modelName = _.lowerFirst(modelData.modelName);}}\n    \t...{{=modelName}}Routes{{?modelIndex<modelData.length-1}},{{?}}\n    {{~}}\n{{?}}\n];\nexport {\n    routes\n}",
+        "_id" : ObjectId("5e598f26ab135b1f2773f10c"),
+        "path" : "/test.txt"
+      }
+    ]
+  },
+
+  {
+    "_id" : ObjectId("5e564bb70c02aa3e81083193"),
+    "description" : "Шаблон модуля",
+    "isRoot" : true,
+    "template" : " ",
+    "name" : "module",
+    "path" : "{{=moduleName}}.js",
+    "schemaExpression" : "new Object({\n  \ttemplate:'<div style=\"font-size:10px;\"><vfg-field for=\"moduleName\"/><vfg-field for=\"children\"/></div>',\n    theme:'bootstrap',\n  \tformGroupClass:'font-small form-group',\n    fieldClasses:'font-small',\n    labelClass:'font-small',\n\tfields:[\n      {\n       \tmodel:'moduleName',\n        type:'input','inputType':'text',\n        label:'Название модуля',\n        required:true,\n        validator:'required'\n      }\n    ] \n}); ",
+    "__v" : 11,
+    "templateItems" : [
+      {
+        "template" : "",
+        "_id" : ObjectId("5e59897816b50928ce49b707"),
+        "path" : "{{=moduleName}}.js"
+      }
+    ],
+    "children" : [
+      {
+        "multiple" : true,
+        "_id" : "5e556fa3a4c5c9101b6425c6"
+      },
+      {
+        "multiple" : false,
+        "_id" : "5e59896816b50928ce49b6e3"
+      }
+    ]
+  },
+
+  {
+    "_id" : ObjectId("5e5818146649bd356c7034de"),
+    "description" : "Дочерний шаблон для модели",
+    "isRoot" : false,
+    "name" : "GraphqlResolver",
+    "schemaExpression" : "new Object({\n  \ttype:'object',\n  \tdefault:function(){\n\t\treturn {};\n    },\n  \tschema:{\n    \tfields:[]\n    }\n});",
+    "templateItems" : [
+      {
+        "template" : "{{var ModelName = _.upperFirst($parent.modelName);}}\n{{var relations = $parent.relations;}}\nimport {ability3 as ability, methods, mutations} from \"../../../../server/apollo/module\";\nimport CrudResolver2 from \"../../../../server/apollo/resolvers/CrudResolver2\";\nimport {{=ModelName}} from \"../../models/{{=ModelName}}\";\n\nexport default\n@methods(['list','view'])\n@mutations(['create','edit','remove'])\nclass {{=ModelName}}Resolver extends CrudResolver2{\n    constructor(){\n        super({{=ModelName}})\n    }\n    populate (query) {\n        return query\n        {{?$parent.relations.length}}\n          {{~$parent.relations :relation:relationIndex}}\n          .populate('{{=relation.relationName}}');\n          {{~}}\n         {{?}};\n    }    \n}",
+        "_id" : ObjectId("5e5833ec6649bd356c703d3c"),
+        "path" : "{{=$parent.$parent.moduleName}}/apollo/resolvers/{{=_.upperFirst($parent.modelName)}}Resolver.js"
+      }
+    ],
+    "children" : [],
+    "__v" : 8
+  },
+
+  {
+    "_id" : ObjectId("5e581e206649bd356c703942"),
+    "description" : "Генерирует схему модели",
+    "isRoot" : false,
+    "name" : "GraphqlSchema",
+    "schemaExpression" : "new Object({\n  \ttype:'object',\n  \tdefault:function(){\n\t\treturn {};\n    },\n  \tschema:{\n    \tfields:[]\n    }\n});",
+    "templateItems" : [
+      {
+        "template" : "{{var ModelName = _.upperFirst($parent.modelName);}}\ntype {{=ModelName}}Model{\n\n}\n\ntype GeneratorTemplatesModelList{\n    rows:[{{=ModelName}}Model]\n    total:Int\n}\n\ntype {{=ModelName}}{\n    validate(model:JSONObject):ValidationResponse\n    view(_id:String!):{{=ModelName}}Model\n    list(pagination:PaginationOptions):{{=ModelName}}ModelList!    \n}\n\ntype {{=ModelName}}Mutation{\n    edit(_id:String!,model:JSONObject!): EditResponse!\n    create(model:JSONObject):CreateResponse!\n    remove(_id:String!):RemoveResponse!\n}",
+        "_id" : ObjectId("5e582ad26649bd356c7039ba"),
+        "path" : "{{=$parent.$parent.moduleName}}/apollo/schema/{{=_.upperFirst($parent.modelName)}}.graphql"
+      }
+    ],
+    "children" : [],
+    "__v" : 1
+  },
+
+  {
+    "_id" : ObjectId("5e582e1f6649bd356c703a09"),
+    "description" : "Mongoose relations",
+    "isRoot" : false,
+    "name" : "Mongoose relations",
+    "children" : [],
+    "schemaExpression" : "new Object({\n\tfields:[\n      {\n       \tmodel:'relationName',\n        label:'Имя cвязи',\n        type:'input',inputType:'text',\n        required:'true',validator:'required'\n      },{\n       \tmodel:'collection',\n        label:'Имя коллекции',\n        type:'input',inputType:'text',\n        required:'true',validator:'required'\n      },{\n       \tmodel:'localField',\n        label:'localField',\n        type:'input',inputType:'text',\n        required:'true',validator:'required'\n      },{\n       \tmodel:'foreignField',\n        label:'foreignField',\n        type:'input',inputType:'text',\n        required:'true',validator:'required'\n      },{\n        model:'justOne',\n        label:'justOne',\n        type:'switch',\n        default:false\n      }\n    ]\n});",
+    "templateItems" : [
+      {
+        "template" : "{{var ModelName = _.upperFirst($parent.modelName);}}\n{{=ModelName}}Schema.virtual('{{=relationName}}', {\n    ref:'{{=collection}}',\n    localField: '{{=localField}}',\n    foreignField: '{{=foreignField}}',\n    justOne: {{=String(justOne)}},\n    options: {\n\t\t\n    }\n});",
+        "_id" : ObjectId("5e582e8f6649bd356c703ad9"),
+        "path" : "1"
+      }
+    ],
+    "__v" : 1
+  },
+
+  {
+    "_id" : ObjectId("5e592bc416b50928ce49aebe"),
+    "description" : "Маршрутизация модуля",
+    "isRoot" : false,
+    "name" : "routes",
+    "schemaExpression" : "new Object({\n    fields:[{\n        model: 'pagination',\n        label:'Поля пагинации',\n        type: 'array',\n        default:[],\n        items: {\n            type:'object',\n            schema: {\n                theme: 'bootstrap',\n                template: `\n                <div class=\"container\">\n                    <div class=\"row\">\n                        <div class=\"col\">\n                            <vfg-field for=\"fieldName\"/>\n                        </div>\n                        <div class=\"col\">\n                            <vfg-field for=\"columnLabel\"/>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col\">\n                            <vfg-field for=\"useFilterOptions\"/>\n                        </div>\n                        <div class=\"col\">\n                            <vfg-field for=\"filterOptions\"/>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col\">\n                            <vfg-field for=\"useComponent\"/>\n\t\t\t\t\t\t\t<vfg-field for=\"componentName\"/>\n                        </div>\n                        <div class=\"col\">\n                            <vfg-field for=\"componentParams\"/>\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col\">\n                            <vfg-field for=\"useFormatFn\"/>\n                        </div>\n                        <div class=\"col\">\n                            <vfg-field for=\"formatFnExpression\"/>\n                        </div>\n                    </div>\n                </div>\n            `,\n                fields: [\n                    {\n                        model: 'fieldName',\n                        label: 'Имя поля',\n                        type: 'input',\n                        inputType: 'text',\n                        required: 'true',\n                        validator: 'required'\n                    }, {\n                        model: 'columnLabel',\n                        label: 'Label столбца',\n                        type: 'input',\n                        inputType: 'text',\n                        required: 'true',\n                        validator: 'required'\n                    },\n                    {\n                        model: 'useFilterOptions',\n                        label: 'Использовать опции поиска',\n                        type: 'switch', default: false\n                    },\n                    {\n                        model: 'filterOptions',\n                        label: 'Опции поиска. Ожидается объект',\n                        default: `{\n  enabled: true, // enable filter for this column\n  placeholder: 'Поиск..', // placeholder for filter input\n  filterValue: undefined, // initial populated value for this filter\n  trigger: 'enter', //only trigger on enter not on keyup\n  transform($input){\n      return String($input).length>0 ? new RegExp($input,'i'):undefined;\n  }\n}`,\n                        type: 'codemirror',\n                        codeMirrorOptions: {\n                            lineNumbers: true,\n                            mode: 'javascript',\n                            gutters: [\"CodeMirror-lint-markers\"],\n                            lint: {\n                                esversion: 6\n                            },\n                            resize: {\n                                minWidth: 100,               //Minimum size of the CodeMirror editor.\n                                minHeight: 50,\n                                resizableWidth: true,        //Which direction the editor can be resized (default: both width and height).\n                                resizableHeight: true,\n                                cssClass: 'cm-resize-handle', //CSS class to use on the *default* resize handle.\n                            }\n                        },\n                        visible: function (model) {\n                            return model.useFilterOptions;\n                        }\n                    },\n\n                    {\n                        model: 'useComponent',\n                        label: 'Использовать спец. компонент Vue',\n                        type: 'switch', default: false\n                    },\n                    {\n                        model: 'componentName',\n                        label: 'Имя компонента',\n                        type: 'input', inputType: 'text',\n                        visible: function (model) {\n                            return model.useComponent;\n                        },\n                        required: true,\n                        validator: 'required'\n                    },\n                    {\n                        model: 'componentParams',\n                        label: 'Параметры компонента',\n                        type: 'codemirror',\n                        codeMirrorOptions: {\n                            lineNumbers: true,\n                            mode: 'javascript',\n                            gutters: [\"CodeMirror-lint-markers\"],\n                            lint: {\n                                esversion: 6\n                            },\n                            resize: {\n                                minWidth: 100,               //Minimum size of the CodeMirror editor.\n                                minHeight: 50,\n                                resizableWidth: true,        //Which direction the editor can be resized (default: both width and height).\n                                resizableHeight: true,\n                                cssClass: 'cm-resize-handle', //CSS class to use on the *default* resize handle.\n                            }\n                        },\n                        default () {\n                            return `function(row){\n  return {\n    to:{name:\\`\\${MODULE_NAME}Update\\`,params:{_id:row._id}},\n    \tanchor: 'Перейти'\n    }\n}`\n                        },\n                        visible: function (model) {\n                            return model.useComponent;\n                        },\n                        required: true,\n                        validator: 'required'\n                    },\n                    {\n                        model: 'useFormatFn',\n                        label: 'Использовать спец.форматирование',\n                        type: 'switch', default: false\n                    },\n                    {\n                        model: 'formatFnExpression',\n                        label: 'Label столбца. Ожидается функция формата function(value){return String(value);}',\n                        default: 'function(value){return String(value);}',\n                        required: 'true',\n                        type: 'codemirror',\n                        codeMirrorOptions: {\n                            lineNumbers: true,\n                            mode: 'javascript',\n                            gutters: [\"CodeMirror-lint-markers\"],\n                            lint: {\n                                esversion: 6\n                            },\n                            resize: {\n                                minWidth: 100,               //Minimum size of the CodeMirror editor.\n                                minHeight: 50,\n                                resizableWidth: true,        //Which direction the editor can be resized (default: both width and height).\n                                resizableHeight: true,\n                                cssClass: 'cm-resize-handle', //CSS class to use on the *default* resize handle.\n                            }\n                        },\n                        visible: function (model) {\n                            return model.useFormatFn;\n                        }\n                    }\n                ]\n            }\n        }\n    }]\n});",
+    "templateItems" : [
+      {
+        "template" : "{{var schemaFields=$parent.schemaFields;}}\n{{var modelName = _.lowerFirst($parent.modelName); }}\n{{var ModelName = _.upperFirst($parent.modelName); }}\n{{var modelLabel = _.upperFirst($parent.modelLabel); }}\n\nimport GraphqlPagination from \"/client/components/GraphqlPagination\";\nimport gql from 'graphql-tag';\nimport _ from 'underscore';\nimport SmartGraphqlForm from \"../../../../client/components/SmartGraphqlForm\";\nconst fragment = `\n_id\n{{?schemaFields.length}}\n{{~schemaFields :schemaField:schemaFieldIndex}}\n    {{=schemaField.name}}\n{{~}}\n{{?}}\n`;\n\nfunction vueSchemaFactory(){\n    let codemirror = function(){\n        return {\n            type:'codemirror',\n            // eslint-disable-next-line no-unused-vars\n            validator:function(value, field, model){\n                if(_.isEmpty(value) ){\n                    return ['Поле обязательно'];\n                }\n                return [];\n            },\n            codeMirrorOptions:{\n                lineNumbers: true,\n                mode:'javascript',\n                gutters: [\"CodeMirror-lint-markers\"],\n                lint: {\n                    esversion: 6\n                },\n                resize:{\n                    minWidth:  200,               //Minimum size of the CodeMirror editor.\n                    minHeight: 100,\n                    resizableWidth:  true,        //Which direction the editor can be resized (default: both width and height).\n                    resizableHeight: true,\n                    cssClass: 'cm-resize-handle', //CSS class to use on the *default* resize handle.\n                }\n            }\n        }\n    };\n\n    return {\n        fields:[\n            {{?schemaFields.length}}\n            {{~schemaFields :schemaField:schemaFieldIndex}}\n                {\n                    model: \"{{=schemaField.name}}\",\n                {{?schemaFields.type==='String'}}\n                    type: \"input\",\n                    inputType: \"text\",\n                {{?}}\n                {{?schemaFields.type==='Boolean'}}\n                    type:'switch',\n                {{?}}\n                {{?schemaFields.required}}\n                    required:true,\n                    validator:'required',\n                {{?}}\n                    label: '{{=schemaField.label}}',\n                }\n            {{~}}\n            {{?}}\n        ]\n    }\n}\n\nconst MODULE_NAME = '{{=modelName}}';\nconst MODULE_PATH = `/${MODULE_NAME}`;\nexport default [\n    {\n    path: `${MODULE_PATH}/create`,\n    name: `${MODULE_NAME}Create`,\n    component: SmartGraphqlForm,\n    meta: {\n        title:'Создать новый {{=modelLabel}}',\n        breadcrumbs:{\n            label:'Создать новый',\n            parent:`${MODULE_NAME}Index`\n        }\n    },\n    props:{\n        mode:'create',\n        schema:vueSchemaFactory,\n        gqlRoot:'{{=modelName}}',\n        fragment:fragment,\n        events:{\n            submit(){\n                this.$router.push({ name: `${MODULE_NAME}Index`});\n            },\n            cancel(){\n                this.$router.push({ name: `${MODULE_NAME}Index`});\n            }\n        }\n    }\n},{\n    path:`${MODULE_PATH}/update/:_id`,\n    name:`${MODULE_NAME}Update`,\n    component: SmartGraphqlForm,\n    meta: {\n        title:async function(){\n            await this.apolloLoaded();\n            return `Изменить {{=modelLabel}} \"${this.model.name}\"`;\n        },\n        breadcrumbs:{\n            label:async function(){\n                await this.apolloLoaded();\n                return `Изменить {{=modelLabel}} \"${this.model.name}\"`;\n            },\n            parent:`${MODULE_NAME}Index`\n        }\n    },\n    props:{\n        mode:'update',\n        schema:vueSchemaFactory,\n        gqlRoot:'{{=modelName}}',\n        fragment:fragment,\n        events:{\n            submit(){\n                this.$router.push({ name: `${MODULE_NAME}Index`});\n            },\n            cancel(){\n                this.$router.push({ name: `${MODULE_NAME}Index`});\n            }\n        }\n    }\n},{\n    path:`${MODULE_PATH}`,\n    name:`${MODULE_NAME}Index`,\n    component:GraphqlPagination,\n    meta: {\n        breadcrumbs:{\n            label:'{{=modelLabel}}',\n            parent:'home'\n        }\n    },\n    props:{\n        header:'DynamicLink',\n        headerParams:{\n            to:`${MODULE_PATH}/create`,\n            anchor:'Создать'\n        },\n        columns: [\n            {{?pagination.length}}\n            {{~pagination :field:fieldIndex}}\n                {\n                    label:'{{=field.columnLabel}}',field:'{{=field.fieldName}}',\n                    {{?field.useComponent}}\n                        component:'{{=field.componentName}}',\n                        componentParams:{{=field.componentParams||'{}'}},\n                    {{?}}\n                    {{?field.useFilterOptions}}\n                        filterOptions:{{=field.filterOptions||'{}'}},\n                    {{?}}\n                    {{?field.useFormatFn}}\n                        formatFn:{{=formatFnExpression}}\n                    {{?}}\n                }\n            {{~}}\n            {{?}}            \n        ],\n        query:{\n            query:gql`\n                query List($pagination:PaginationOptions!){\n                    {{=modelName}}{\n                        list(pagination:$pagination){\n                            rows{\n                                ${fragment}\n                            },\n                            total\n                        }\n                    }\n                }`,\n            update(data){\n                this.rows = data.{{=modelName}}.list.rows;\n                this.totalRecords = data.{{=modelName}}.list.total;\n            }\n        }\n    }\n}\n];",
+        "_id" : ObjectId("5e594f0c16b50928ce49b63c"),
+        "path" : "{{=$parent.$parent.moduleName}}/client/routes/{{=_.lowerFirst($parent.modelName)}}.routes.js"
+      }
+    ],
+    "children" : [],
+    "__v" : 10
+  },
+  {
+    "_id" : ObjectId("5e59896816b50928ce49b6e3"),
+    "description" : "",
+    "isRoot" : false,
+    "name" : "client/index",
+    "schemaExpression" : "new Object({\n     fields:[\n\n     ]\n});",
+    "templateItems" : [
+      {
+        "template" : "{{=JSON.stringify(it)}}",
+        "_id" : ObjectId("5e5989d416b50928ce49b7cf"),
+        "path" : "{{=$parent.moduleName}}/client/index.js"
+      }
+    ],
+    "children" : [],
+    "__v" : 4
+  }
+]
